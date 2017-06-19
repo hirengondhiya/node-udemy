@@ -1,0 +1,14 @@
+{
+  "name": "node-test",
+  "version": "1.0.0",
+  "description": "Demo project to learn Mocha test suit",
+  "main": "index.js",
+  "scripts": {
+    "test": "mocha **/*.test.js"
+  },
+  "author": "Hiren Gondhiya",
+  "license": "ISC",
+  "devDependencies": {
+    "mocha": "^3.0.0"
+  }
+}
