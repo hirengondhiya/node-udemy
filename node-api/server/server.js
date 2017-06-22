@@ -12,7 +12,7 @@ app.use(bodyParser.json());
 
 // POST
 app.post(config.routes.todos, (req, res) => {
-    console.log(req.body);
+    // console.log(req.body);
     var todo = new Todo(req.body);
     todo.save().then((doc) => {
         res.send(doc);
@@ -24,6 +24,10 @@ app.post(config.routes.todos, (req, res) => {
 app.listen(port, () => {
     console.log(`Listening on port: ${port}.`);
 });
+
+module.exports = {
+    app
+};
 
 // var mongoose = require('mongoose');
 // mongoose.Promise = global.Promise;
