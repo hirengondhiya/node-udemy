@@ -2,7 +2,7 @@ var { ObjectID } = require('mongodb');
 var config = require('../server/config.js');
 
 var { mongoose } = require(config.filePath.mongooseDb);
-// var { Todo } = require(config.filePath.todoModel);
+var { Todo } = require(config.filePath.todoModel);
 var { User } = require(config.filePath.userModel);
 
 
@@ -14,23 +14,27 @@ if ( !ObjectID.isValid(_id)) {
 //     console.log(`Todos: ${todos}`);
 // }).catch(handleError);
 
+var text = 'Some test todo 1';
+Todo.findOne({text}).then(todo => {
+    console.log(`Todo: ${todo}`);
+}).catch(handleError);
 // Todo.findOne({_id}).then(todo => {
 //     console.log(`Todo: ${todo}`);
 // }).catch(handleError);
 
 // Todo.findById(_id).then(todo => console.log(`Todo by id: ${todo}`)).catch(handleError);
 
-User.findById(_id)
-    .then(printResult)
-    .catch(handleError);
+// User.findById(_id)
+//     .then(printResult)
+//     .catch(handleError);
 
-User.find({_id})
-    .then(printResult)
-    .catch(handleError);
+// User.find({_id})
+//     .then(printResult)
+//     .catch(handleError);
 
-User.findOne({_id})
-    .then(printResult)
-    .catch(handleError);
+// User.findOne({_id})
+//     .then(printResult)
+//     .catch(handleError);
 
 function printResult(result) {
     if(result){

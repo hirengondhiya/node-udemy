@@ -28,21 +28,21 @@ app.get(config.routes.todos, (req, res) => {
         .catch(error => res.status(400).send(error));
 });
 
-app.get(config.routes.todos + config.routes.params.id, (req, res) => {
+app.get(config.routes.todosWithId, (req, res) => {
 // app.get('/todos/:id', (req, res) => {
     var _id = req.params.id;
     // console.log(_id);
     // res.send(req.params);
 
     if (!ObjectID.isValid(_id)) {
-        return res.status(404).send({error: 'Invalid id.'});
+        return res.status(404).send({error: config.errorMessage.invalidId});
     }
 
     Todo.findById(_id).then((todo) => {
         if (todo) {
             return res.send({todo})
         }
-        res.status(404).send({error: 'Todo not found.'});
+        res.status(404).send({error: config.errorMessage.todoNotFound});
     }).catch(error => {
         res.status(404).send({error});
     });

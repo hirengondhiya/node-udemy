@@ -1,15 +1,16 @@
 var config = require('../config.js');
 var expect = require('expect');
 var request = require('supertest');
+var { ObjectID } = require('mongodb');
 
 var { app } = require('./../' + config.filePath.app);
 var { Todo } = require('./../' + config.filePath.todoModel);
+var todos = [
+    {_id: new ObjectID(), text: 'Some test todo 1'},
+    {_id: new ObjectID(), text: 'Some test todo 2'},
+];
 
 beforeEach((done) => {
-    var todos = [
-        {text: 'Some test todo 1'},
-        {text: 'Some test todo 2'},
-    ];
     // console.log('\tDeleting existing todos from todos collection');
     Todo.remove({}).then(() => {
         return Todo.insertMany(todos);
@@ -64,9 +65,6 @@ describe('POST /todos', () => {
 describe('GET /todos', () => {
 
     it('should return all todos', (done) => {
-        // var text = 'test get todos';
-        // var todo = new Todo({text})
-        // todo.save();
         // uncomment below to verify test failure.
         // text = text + '1';
         request(app)
@@ -75,7 +73,40 @@ describe('GET /todos', () => {
             .expect(res => {
                 expect(res.body.todos).toExist();
                 expect(res.body.todos.length).toBe(2);
-                // expect(res.body.todos[0]).toInclude({text});
+            })
+            .end(done);
+    });
+});
+
+describe('GET todos/:id', () => {
+    it('should get todo with given id', (done) => {
+        var _id = todos[0]._id.toHexString();
+        request(app)
+            .get(config.routes.todosWithId.replace(':id', _id))
+            .expect(200)
+            .expect(res => {
+                expect(res.body.todo).toExist();
+                expect(res.body.todo).toInclude({text: todos[0].text})
+            })
+            .end(done);
+    });
+    it('should fail on Invaild id.', (done) => {
+        var _id = 123;
+        request(app)
+            .get(config.routes.todosWithId.replace(':id', _id))
+            .expect(404)
+            .expect(res => { 
+                expect(res.body.error).toBe(config.errorMessage.invalidId);
+            })
+            .end(done);
+    });
+    it('should fail on no Todo', (done) => {
+        var _id = new ObjectID().toHexString();
+        request(app)
+            .get(config.routes.todosWithId.replace(':id', _id))
+            .expect(404)
+            .expect(res => {
+                expect(res.body.error).toBe(config.errorMessage.todoNotFound);
             })
             .end(done);
     });
