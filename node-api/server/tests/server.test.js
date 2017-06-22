@@ -52,3 +52,23 @@ describe('POST /todos', () => {
             });
     });
 });
+
+describe('GET /todos', () => {
+
+    it('should return all todos', (done) => {
+        var text = 'test get todos';
+        var todo = new Todo({text})
+        todo.save();
+        // uncomment below to verify test failure.
+        // text = text + '1';
+        request(app)
+            .get(config.routes.todos)
+            .expect(200)
+            .expect(res => {
+                expect(res.body.todos).toExist();
+                expect(res.body.todos.length).toBe(1);
+                expect(res.body.todos[0]).toInclude({text});
+            })
+            .end(done);
+    });
+});
