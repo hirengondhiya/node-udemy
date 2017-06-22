@@ -2,8 +2,8 @@ var config = require('../config.js');
 var expect = require('expect');
 var request = require('supertest');
 
-var { app } = require('./../server.js');
-var { Todo } = require('./../models/todo.model');
+var { app } = require('./../../' + config.filePath.app);
+var { Todo } = require('./../../' + config.filePath.todoModel);
 
 beforeEach((done) => {
     var todos = [
