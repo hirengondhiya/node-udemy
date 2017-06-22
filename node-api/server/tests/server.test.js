@@ -6,9 +6,17 @@ var { app } = require('./../server.js');
 var { Todo } = require('./../models/todo.model');
 
 beforeEach((done) => {
+    var todos = [
+        {text: 'Some test todo 1'},
+        {text: 'Some test todo 2'},
+    ];
     // console.log('\tDeleting existing todos from todos collection');
-    Todo.remove({}).then(() => done());
+    Todo.remove({}).then(() => {
+        return Todo.insertMany(todos);
+    })
+    .then(() => done());
 });
+
 describe('POST /todos', () => {
     it('should create a new todo', (done) => {
         var text = 'Test todo';
@@ -24,7 +32,7 @@ describe('POST /todos', () => {
                     return done(err);
                 }
 
-                Todo.find().then((todos) => {
+                Todo.find({text}).then((todos) => {
                     expect(todos.length).toBe(1);
                     expect(todos[0].text).toBe(text);
                     done();
@@ -46,7 +54,7 @@ describe('POST /todos', () => {
                 }
 
                 Todo.find().then( (todos) => {
-                    expect(todos.length).toBe(0); // pass test if there is no todo returned
+                    expect(todos.length).toBe(2); // pass test if only todos from beforeEach block is returned
                     done();
                 }).catch(err =>done(err)); // fail test if there is any error
             });
@@ -56,9 +64,9 @@ describe('POST /todos', () => {
 describe('GET /todos', () => {
 
     it('should return all todos', (done) => {
-        var text = 'test get todos';
-        var todo = new Todo({text})
-        todo.save();
+        // var text = 'test get todos';
+        // var todo = new Todo({text})
+        // todo.save();
         // uncomment below to verify test failure.
         // text = text + '1';
         request(app)
@@ -66,8 +74,8 @@ describe('GET /todos', () => {
             .expect(200)
             .expect(res => {
                 expect(res.body.todos).toExist();
-                expect(res.body.todos.length).toBe(1);
-                expect(res.body.todos[0]).toInclude({text});
+                expect(res.body.todos.length).toBe(2);
+                // expect(res.body.todos[0]).toInclude({text});
             })
             .end(done);
     });
