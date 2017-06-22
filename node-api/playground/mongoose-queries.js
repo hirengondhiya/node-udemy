@@ -1,9 +1,9 @@
 var { ObjectID } = require('mongodb');
 var config = require('../server/config.js');
 
-var { mongoose } = require('../' + config.filePath.mongooseDb);
-// var { Todo } = require('../' + config.filePath.todoModel);
-var { User } = require('../' + config.filePath.userModel);
+var { mongoose } = require(config.filePath.mongooseDb);
+// var { Todo } = require(config.filePath.todoModel);
+var { User } = require(config.filePath.userModel);
 
 
 var _id = '694b066e5e3092f658e6be22';

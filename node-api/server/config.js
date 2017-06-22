@@ -1,4 +1,4 @@
-var server = 'server/';
+var server = '../server/';
 var db = server + 'db/';
 var models = server + 'models/';
 
@@ -19,6 +19,9 @@ module.exports = {
     // express routes
     routes: {
         todos: '/todos',
-        users: '/users'
+        users: '/users',
+        params: {
+            id: '/:id'
+        }
     },
 }
